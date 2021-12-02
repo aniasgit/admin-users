@@ -14,7 +14,7 @@ type User = {
 }
 
 function getUsers(): Promise<User[]> {
-  return fetch('users.json', {
+  return fetch('/users.json', {
     headers : {
       'Content-Type': 'application/json',
       'Accept': 'application/json'

@@ -39,9 +39,9 @@ function UsersTable() {
         key: '6',
         title: 'Hobbies',
         dataIndex: 'hobbies',
-        render: (hobbies: any) => (
+        render: (hobbies: string[]) => (
           <>
-            {hobbies.map((hobby: string) => {
+            {hobbies.map((hobby) => {
               let text:string;
               const found = hobbyMap.find(elem => elem.id === hobby);
               if (found !== undefined){
@@ -77,10 +77,11 @@ function UsersTable() {
       {
         key: '10',
         title: 'Action',
-        render: () => {
+        dataIndex: 'id',
+        render: (id: string) => {
             return (
             <>
-            <Link to='/userid'>
+            <Link to={'/user/'+id}>
             <Button type="primary"  icon={<FormOutlined/>} size='small' block>
                 Details
             </Button>

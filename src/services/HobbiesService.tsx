@@ -4,7 +4,7 @@ type Hobby = {
 }
 
 function getHobbies(): Promise<Hobby[]> {
-  return fetch('hobbies.json', {
+  return fetch('/hobbies.json', {
     headers : {
       'Content-Type': 'application/json',
       'Accept': 'application/json'

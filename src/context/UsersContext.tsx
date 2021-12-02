@@ -6,7 +6,8 @@ import type {Hobby} from '../services/HobbiesService';
 
 export type UserContextType = {
     usersData: User[],
-    hobbyMap: Hobby[]
+    hobbyMap: Hobby[],
+    getUser: (id: string) => User|undefined
 }
 
 export const UsersContext = createContext<UserContextType>(undefined!);
@@ -32,9 +33,15 @@ export const UsersProvider = (props: any) => {
         })
     }, []);
 
+    function getUser(id:string) {
+        const found = usersData.find(elem => elem.id === id);
+        return found;
+    }
+
     let context: UserContextType= {
         usersData,
-        hobbyMap
+        hobbyMap,
+        getUser
     }
 
     return (
