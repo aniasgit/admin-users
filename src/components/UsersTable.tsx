@@ -4,39 +4,57 @@ import {UsersContext} from '../context/UsersContext';
 import type {UserContextType} from '../context/UsersContext';
 import {DeleteOutlined, FormOutlined} from '@ant-design/icons';
 import {Link} from 'react-router-dom';
+import type {User} from '../services/UsersService';
+import { ColumnsType } from 'antd/es/table'
+import {nameFilters, onNameFilter, emailFilters, onEmailFilter, ageFilters, onAgeFilter, hobbyFilters, onHobbyFilter, dateFilters, onDateFilter, addressFilters, onAddressFilter} from './UsersTableFilters';
+
 
 function UsersTable() {
   
     const {usersData, hobbyMap} = useContext<UserContextType>(UsersContext);
-   
-    const columns = [
+
+    const columns : ColumnsType<User> = [
       {
         key: '1',
         title: 'Name',
-        dataIndex: 'name'
+        dataIndex: 'name',
+        render: (name: string, record: User) => {return name+' '+record.lastName},
+        sorter: (record1: User, record2: User) => {
+          const comp = record1.name.localeCompare(record2.name);
+          if (comp !== 0) return comp;
+          else return record1.lastName.localeCompare(record2.lastName);
+        },
+        filters: nameFilters(usersData),
+        onFilter: onNameFilter
       },
       {
         key: '2',
-        title: 'Last name',
-        dataIndex: 'lastName'
+        title: 'Email',
+        dataIndex: 'email',
+        sorter: (record1: User, record2: User) => record1.email.localeCompare(record2.email),
+        filters: emailFilters(usersData),
+        onFilter: onEmailFilter
       },
       {
         key: '3',
-        title: 'Email',
-        dataIndex: 'email'
+        title: 'Gender',
+        dataIndex: 'gender',
+        filters: [
+          {text: "female", value: "female"},
+          {text: "male", value: "male"}
+        ],
+        onFilter: (value: any, record: User) => record.gender === value
       },
       {
         key: '4',
-        title: 'Gender',
-        dataIndex: 'gender'
+        title: 'Age',
+        dataIndex: 'age',
+        sorter: (record1:User, record2:User) => record1.age-record2.age,
+        filters: ageFilters(usersData),
+        onFilter: onAgeFilter
       },
       {
         key: '5',
-        title: 'Age',
-        dataIndex: 'age'
-      },
-      {
-        key: '6',
         title: 'Hobbies',
         dataIndex: 'hobbies',
         render: (hobbies: string[]) => (
@@ -57,25 +75,33 @@ function UsersTable() {
               );
             })}
           </>
-        )
+        ),
+        filters: hobbyFilters(hobbyMap),
+        onFilter: onHobbyFilter
+      },
+      {
+        key: '6',
+        title: 'Date of birth',
+        dataIndex: 'dateOfBirth',
+        sorter: (record1: User, record2: User) => record1.dateOfBirth.localeCompare(record2.dateOfBirth),
+        filters: dateFilters(usersData),
+        onFilter: onDateFilter
       },
       {
         key: '7',
-        title: 'Date of birth',
-        dataIndex: 'dateOfBirth'
+        title: 'Address',
+        dataIndex: 'address',
+        sorter: (record1: User, record2: User) => record1.address.localeCompare(record2.address),
+        filters: addressFilters(usersData),
+        onFilter: onAddressFilter
       },
       {
         key: '8',
-        title: 'Address',
-        dataIndex: 'address'
-      },
-      {
-        key: '9',
         title: 'Phone number',
         dataIndex: 'phoneNumber'
       },
       {
-        key: '10',
+        key: '9',
         title: 'Action',
         dataIndex: 'id',
         render: (id: string) => {
