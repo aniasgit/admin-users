@@ -3,6 +3,7 @@ import {UsersContext} from '../context/UsersContext';
 import type {UserContextType} from '../context/UsersContext';
 import {useContext} from  'react';
 import {useParams} from 'react-router-dom';
+import moment from 'moment';
 
 function UserForm() {
 
@@ -33,6 +34,7 @@ function UserForm() {
           },
         },
     };
+    const [form] = Form.useForm();
 
     const {hobbyMap, getUser} = useContext<UserContextType>(UsersContext);
 
@@ -50,38 +52,42 @@ function UserForm() {
         gender: user.gender,
         age: user.age,
         hobbies: user.hobbies,
-        //dateOfBirth: user.dateOfBirth,
+        dateOfBirth: moment(user.dateOfBirth, 'YYYY-MM-DD'),
         address: user.address,
         phoneNumber: user.phoneNumber
     }
 
+    const onReset = () => {
+        form.resetFields();
+    };
+
     return (
-        <Form name="userForm" initialValues={initial} {...formItemLayout}>
-            <Form.Item name="name" label="Name">
+        <Form name="userForm" form={form} initialValues={initial} {...formItemLayout}>
+            <Form.Item name="name" label="Name" rules={[{ required: true, message: 'User name is required!' }]}>
                 <Input />
             </Form.Item>
-            <Form.Item name="lastName" label="Last Name">
+            <Form.Item name="lastName" label="Last Name" rules={[{ required: true, message: 'User last name is required!' }]}>
                 <Input/>
             </Form.Item>
-            <Form.Item name="email" label="Email">
+            <Form.Item name="email" label="E-mail" rules={[{ required: true, type: "email", message: 'User e-mail is required!' }]}>
                 <Input/>
             </Form.Item>
             <Form.Item name="gender" label="Gender">
-                <Select  style={{ width: 120 }} /*onChange={}*/>
+                <Select  style={{ width: 120 }}>
                 <Option value="male">male</Option>
                 <Option value="female">female</Option>
                 </Select>
             </Form.Item>
-            <Form.Item name="age" label="Age">
+            <Form.Item name="age" label="Age" rules={[{ required: true, type: "number", message: 'User age as a number is required!' }]}>
                 <Input/>
             </Form.Item>
-            <Form.Item name="hobbies" label="Hobbies">
+            <Form.Item name="hobbies" label="Hobbies" rules={[{ required: true, message: 'Please provide at least one user hobby!' }]}>
                 <Select mode="multiple">
                     {children}
                 </Select>
             </Form.Item>
             <Form.Item name="dateOfBirth" label="Date of birth">
-                <DatePicker></DatePicker>
+                <DatePicker allowClear={false}></DatePicker>
             </Form.Item>
             <Form.Item name="address" label="Address">
                 <Input />
@@ -91,7 +97,7 @@ function UserForm() {
             </Form.Item>
             <Form.Item name="buttons" {...tailFormItemLayout}>
                 <Button>Back to main view</Button>
-                <Button>Reset</Button>
+                <Button onClick={onReset}>Reset</Button>
                 <Button type="primary">Submit</Button>
             </Form.Item>
             
