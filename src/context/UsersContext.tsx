@@ -20,20 +20,22 @@ export const UsersProvider = (props: any) => {
     const [hobbyMap, setHobbyMap] = useState<Hobby[]>([]);
 
     useEffect(() => {
-    getUsers()
-        .then(setUsersData)
-        .catch((err) => {
-            console.log(err)
-        })
+        async function fetchData() {
+            let users = await getUsers();
+            setUsersData(users);
+        }
+
+        fetchData();
     }, []);
 
     useEffect(() => {
-    getHobbies()
-        .then(setHobbyMap)
-        .catch((err) => {
-            console.log(err)
-        })
-    }, []);
+        async function fetchData() {
+            let hobbies = await getHobbies();
+            setHobbyMap(hobbies);
+        }
+        
+        fetchData();
+        }, []);
 
     function getUser(id:string) {
         const found = usersData.find(elem => elem.id === id);

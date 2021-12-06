@@ -3,19 +3,18 @@ type Hobby = {
   name: string
 }
 
-function getHobbies(): Promise<Hobby[]> {
-  return fetch('/hobbies.json', {
+async function getHobbies(): Promise<Hobby[]> {
+  
+  let response = await fetch('/hobbies.json', {
     headers : {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     }
   })
-  .then(function(response){
-    return response.json();
-  })
-  .then(function(myJson) {
-    return myJson;
-  });
+
+  let myJson = await response.json();
+
+  return myJson;
 }
 
 export type {Hobby};
