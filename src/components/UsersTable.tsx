@@ -1,4 +1,4 @@
-import {Table, Tag, Button} from 'antd';
+import {Table, Tag, Button, Modal} from 'antd';
 import {useContext} from  'react';
 import {UsersContext} from '../context/UsersContext';
 import type {UserContextType} from '../context/UsersContext';
@@ -8,12 +8,22 @@ import type {User} from '../services/UsersService';
 import { ColumnsType } from 'antd/es/table'
 import {nameFilters, onNameFilter, emailFilters, onEmailFilter, ageFilters, onAgeFilter, hobbyFilters, onHobbyFilter, dateFilters, onDateFilter, addressFilters, onAddressFilter} from './UsersTableFilters';
 
-
 function UsersTable() {
   
-    const {usersData, hobbyMap} = useContext<UserContextType>(UsersContext);
+    const {usersData, hobbyMap, getUser, deleteUser} = useContext<UserContextType>(UsersContext);
 
-    const columns : ColumnsType<User> = [
+    function onDelete(id:string) {
+      const user: User|undefined= getUser(id);
+      if (user !== undefined) {
+        Modal.confirm({
+          title: 'Are you sure you want to delete '+user.name+' '+user.lastName,
+          okType:"danger",
+          onOk: () => deleteUser(id)
+        })
+      }
+    }
+
+    const columns: ColumnsType<User> = [
       {
         key: '1',
         title: 'Name',
@@ -105,18 +115,20 @@ function UsersTable() {
         title: 'Action',
         dataIndex: 'id',
         render: (id: string) => {
-            return (
-            <>
-            <Link to={'/user/'+id}>
-            <Button type="primary"  icon={<FormOutlined/>} size='small' block>
-                Details
-            </Button>
-            </Link>
-            <Button  icon={<DeleteOutlined />} size='small' block>
+          return (
+          <>
+          <Link to={'/user/'+id}>
+          <Button icon={<FormOutlined/>} size='small' block>
+              Details
+          </Button>
+          </Link>
+          <Link to='/'>
+            <Button icon={<DeleteOutlined />} size='small' onClick={() => onDelete(id)} danger={true} block>
                 Delete
             </Button>
-            </>
-            );
+          </Link>
+          </>
+          );
         }
       }
     ]

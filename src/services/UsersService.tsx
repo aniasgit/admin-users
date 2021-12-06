@@ -24,6 +24,10 @@ function getUsers(): Promise<User[]> {
     return response.json();
   })
   .then(function(myJson) {
+    myJson = myJson.map((user: User) => {
+      user.hobbies = Array.from(new Set(user.hobbies));
+      return user;
+    });
     return myJson;
   });
 }
