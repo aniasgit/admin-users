@@ -42,11 +42,11 @@ function UserForm() {
     if (isSaved) return <Navigate to='/'/>
 
     const user = getUser(params.userId!);
-    if (user === undefined) return <Spin/>
+    if (user === undefined || hobbyMap === []) return <Spin/>
 
     let children: any[] = [];
     for (let i:number=0; i<hobbyMap.length ; i++) {
-        children.push(<Option value={hobbyMap[i].id}>{hobbyMap[i].name}</Option>);
+        children.push(<Option key={hobbyMap[i].id} value={hobbyMap[i].id}>{hobbyMap[i].name}</Option>);
     }
     const initial = {
         name: user.name,
@@ -113,13 +113,12 @@ function UserForm() {
             <Form.Item name="phoneNumber" label="Phone Number">
                 <Input/>
             </Form.Item>
-            <Form.Item name="buttons" {...tailFormItemLayout}>
+            <Form.Item {...tailFormItemLayout}>
                 <Link to='/'>
                     <Button>Back to main view</Button>
                 </Link>
                 <Button onClick={onReset}>Reset</Button>
-            <Button type="primary" htmlType="submit">Save</Button>
-            
+                <Button type="primary" htmlType="submit">Save</Button>
             </Form.Item>
             
         </Form>

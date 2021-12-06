@@ -133,7 +133,7 @@ function UsersTable() {
       }
     ]
 
-    return <Table columns = {columns} dataSource = {usersData}></Table>
+    return <Table columns = {columns} dataSource = {usersData} rowKey="id"></Table>
 }
 
 export default UsersTable;
