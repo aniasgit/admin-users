@@ -31,5 +31,16 @@ async function getUsers(): Promise<User[]> {
   return myJson;
 }
 
-export {getUsers};
+async function deleteUser(id: string): Promise<boolean> {
+  console.log("Simulating delete operation for user.id="+id);
+  return true;
+}
+
+async function updateUser(user: User): Promise<boolean> {
+  console.log("Simulating updating operation for user.id="+user.id);
+  return true;
+}
+
+const UsersService = {getUsers, deleteUser, updateUser};
+export default UsersService;
 export type {User};

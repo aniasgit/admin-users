@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState} from "react";
-import {getUsers} from '../services/UsersService';
+import UsersService from '../services/UsersService';
 import type {User} from '../services/UsersService';
 import {getHobbies} from '../services/HobbiesService';
 import type {Hobby} from '../services/HobbiesService';
@@ -21,7 +21,7 @@ export const UsersProvider = (props: any) => {
 
     useEffect(() => {
         async function fetchData() {
-            let users = await getUsers();
+            let users = await UsersService.getUsers();
             setUsersData(users);
         }
 
@@ -42,22 +42,31 @@ export const UsersProvider = (props: any) => {
         return found;
     }
 
-    function updateUser(changedUser:User) {
-        const changedUsersData = usersData.map((user) => {
-            if (user.id === changedUser.id) {
-                return changedUser;
-            }
-            else return user;
-        })
-        setUsersData(changedUsersData);
+    async function updateUser(changedUser:User) {
+        let updateSuccessful = await UsersService.updateUser(changedUser);
+
+        if (updateSuccessful) {
+
+            const changedUsersData = usersData.map((user) => {
+                if (user.id === changedUser.id) {
+                    return changedUser;
+                }
+                else return user;
+            })
+            setUsersData(changedUsersData);
+        }
     }
 
-    function deleteUser(id: string) {
-        let newUsersData = [];
-        newUsersData = usersData.filter((user: User) => {
-            return user.id !== id;
-        });
-        setUsersData(newUsersData);
+    async function deleteUser(id: string) {
+        let deleteSuccessful = await UsersService.deleteUser(id);
+
+        if (deleteSuccessful) {
+            let newUsersData = [];
+            newUsersData = usersData.filter((user: User) => {
+                return user.id !== id;
+            });
+            setUsersData(newUsersData);
+        }
     }
 
     let context: UserContextType= {
