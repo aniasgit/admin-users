@@ -1,13 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import 'antd/dist/antd.css';
 import {BrowserRouter} from 'react-router-dom'
+import {UsersProvider} from './context/UsersContext';
+import {AppRoutes} from './routing'
 
 ReactDOM.render(
   <React.Fragment>
     <BrowserRouter>
-      <App />
+      <UsersProvider>
+        <AppRoutes />
+      </UsersProvider>
     </BrowserRouter>
   </React.Fragment>,
   document.getElementById('root')

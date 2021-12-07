@@ -1,11 +1,11 @@
 import {Form, Input, Select, DatePicker, Spin, Button, InputNumber, Modal} from 'antd';
 import {UsersContext} from '../context/UsersContext';
-import type {UserContextType} from '../context/UsersContext';
+import type {UserContextType} from '../types';
 import {useContext, useState} from  'react';
 import {useParams, Link, Navigate} from 'react-router-dom';
 import moment from 'moment';
 
-function UserForm() {
+const UserForm = () => {
 
     const params = useParams();
 
@@ -48,6 +48,7 @@ function UserForm() {
     for (let i:number=0; i<hobbyMap.length ; i++) {
         children.push(<Option key={hobbyMap[i].id} value={hobbyMap[i].id}>{hobbyMap[i].name}</Option>);
     }
+    
     const initial = {
         name: user.name,
         lastName: user.lastName,
@@ -60,11 +61,11 @@ function UserForm() {
         phoneNumber: user.phoneNumber
     }
 
-    const onReset = () => {
+    const handleReset = () => {
         form.resetFields();
     }
 
-    const onFinish = (values: any) => {
+    const handleFinish = (values: any) => {
         let changedUser = form.getFieldsValue();
         changedUser.dateOfBirth = changedUser.dateOfBirth.format('YYYY-MM-DD').toString();
         changedUser.id = user.id;
@@ -72,7 +73,7 @@ function UserForm() {
         setIsSaved(true);
     }
     
-    const onFinishFailed = (errorInfo: any) => {
+    const handleFinishFailed = (errorInfo: any) => {
         Modal.error({
             title: 'Validation error',
             content: 'Provide right values to all required fields.',
@@ -80,7 +81,7 @@ function UserForm() {
     }
 
     return (
-        <Form name="userForm" form={form} initialValues={initial} {...formItemLayout}  onFinish={onFinish} onFinishFailed={onFinishFailed}>
+        <Form name="userForm" form={form} initialValues={initial} {...formItemLayout}  onFinish={handleFinish} onFinishFailed={handleFinishFailed}>
             <Form.Item name="name" label="Name" rules={[{ required: true, whitespace: true, message: 'User name is required!' }]}>
                 <Input />
             </Form.Item>
@@ -100,7 +101,7 @@ function UserForm() {
                 <InputNumber/>
             </Form.Item>
             <Form.Item name="hobbies" label="Hobbies" rules={[{ required: true, message: 'Please provide at least one user hobby!' }]}>
-                <Select mode="multiple">
+                <Select mode="multiple" virtual={false}>
                     {children}
                 </Select>
             </Form.Item>
@@ -117,7 +118,7 @@ function UserForm() {
                 <Link to='/'>
                     <Button>Back to main view</Button>
                 </Link>
-                <Button onClick={onReset}>Reset</Button>
+                <Button onClick={handleReset}>Reset</Button>
                 <Button type="primary" htmlType="submit">Save</Button>
             </Form.Item>
             

@@ -1,7 +1,6 @@
-import type {User} from '../services/UsersService';
-import type {Hobby} from '../services/HobbiesService';
+import type {Hobby, User} from '../types';
 
-function nameFilters(users: User[]) {
+const nameFilters = (users: User[]) => {
     let nameArray = users.map((user) => user.name+' '+user.lastName);
     nameArray = Array.from(new Set(nameArray));
     nameArray.sort();
@@ -10,10 +9,11 @@ function nameFilters(users: User[]) {
     return nameFilters;
 }
 
-function onNameFilter (value: any, record: User) {
+const filterName = (value: any, record: User) => {
     return (record.name+' '+record.lastName) === value;
 }
-function emailFilters(users: User[]) {
+
+const emailFilters = (users: User[]) => {
     let emailArray = users.map((user) => user.email);
     emailArray = Array.from(new Set(emailArray));
     emailArray.sort();
@@ -22,11 +22,11 @@ function emailFilters(users: User[]) {
     return emailFilters;
 }
 
-function onEmailFilter (value: any, record: User) {
+const filterEmail = (value: any, record: User) => {
     return record.email === value;
 }
 
-function ageFilters(users: User[]) {
+const ageFilters = (users: User[]) => {
     let ageArray = users.map((user) => user.age);
     ageArray = Array.from(new Set(ageArray));
     ageArray.sort();
@@ -35,22 +35,22 @@ function ageFilters(users: User[]) {
     return ageFilters;
 }
 
-function onAgeFilter (value: any, record: User) {
+const filterAge = (value: any, record: User) => {
     return record.age === value;
 }
 
-function hobbyFilters(hobbies: Hobby[]) {
+const hobbyFilters = (hobbies: Hobby[]) => {
     hobbies.sort((a, b) => a.name.localeCompare(b.name));
     let hobbyFilters = [];
     hobbyFilters = hobbies.map((hobby) => ({text: hobby.name, value: hobby.id}));
     return hobbyFilters;
 }
 
-function onHobbyFilter (value: any, record: User) {
+const filterHobby  = (value: any, record: User) => {
     return record.hobbies.includes(value);
 }
 
-function dateFilters(users: User[]) {
+const dateFilters = (users: User[]) => {
     let dateArray = users.map((user) => user.dateOfBirth);
     dateArray = Array.from(new Set(dateArray));
     dateArray.sort();
@@ -59,11 +59,11 @@ function dateFilters(users: User[]) {
     return dateFilters;
 }
 
-function onDateFilter (value: any, record: User) {
+const filterDate = (value: any, record: User) => {
     return record.dateOfBirth === value;
 }
 
-function addressFilters(users: User[]) {
+const addressFilters = (users: User[]) => {
     let addressArray = users.map((user) => user.address);
     addressArray = Array.from(new Set(addressArray));
     addressArray.sort();
@@ -72,8 +72,8 @@ function addressFilters(users: User[]) {
     return addressFilters;
 }
 
-function onAddressFilter (value: any, record: User) {
+const filterAddress = (value: any, record: User) => {
     return record.address === value;
 }
-export {nameFilters, onNameFilter, emailFilters, onEmailFilter, ageFilters, onAgeFilter, hobbyFilters, onHobbyFilter, dateFilters, 
-    onDateFilter, addressFilters, onAddressFilter}
+export {nameFilters, filterName, emailFilters, filterEmail, ageFilters, filterAge, hobbyFilters, filterHobby, dateFilters, 
+    filterDate, addressFilters, filterAddress}

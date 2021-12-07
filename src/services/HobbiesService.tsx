@@ -1,10 +1,6 @@
-type Hobby = {
-  id: string,
-  name: string
-}
+import type {Hobby} from '../types';
 
-async function getHobbies(): Promise<Hobby[]> {
-  
+const getHobbies = async (): Promise<Hobby[]> => {
   let response = await fetch('/hobbies.json', {
     headers : {
       'Content-Type': 'application/json',
@@ -15,7 +11,7 @@ async function getHobbies(): Promise<Hobby[]> {
   let myJson = await response.json();
 
   return myJson;
+  
 }
 
-export type {Hobby};
 export {getHobbies};

@@ -1,19 +1,6 @@
-type GenderType = 'male'|'female';
+import type {User} from '../types';
 
-type User = {
-  id: string,
-  name: string,
-  lastName: string,
-  email: string,
-  age: number,
-  gender: GenderType,
-  phoneNumber: string,
-  address: string,
-  dateOfBirth: string,
-  hobbies: string[]
-}
-
-async function getUsers(): Promise<User[]> {
+const getUsers = async (): Promise<User[]> => {
 
   let response = await fetch('/users.json', {
     headers : {
@@ -31,16 +18,16 @@ async function getUsers(): Promise<User[]> {
   return myJson;
 }
 
-async function deleteUser(id: string): Promise<boolean> {
+const deleteUser = async (id: string): Promise<boolean> => {
   console.log("Simulating delete operation for user.id="+id);
   return true;
 }
 
-async function updateUser(user: User): Promise<boolean> {
+const updateUser = async (user: User): Promise<boolean> => {
   console.log("Simulating updating operation for user.id="+user.id);
   return true;
 }
 
 const UsersService = {getUsers, deleteUser, updateUser};
 export default UsersService;
-export type {User};
+

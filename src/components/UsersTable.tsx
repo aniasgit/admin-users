@@ -1,18 +1,17 @@
 import {Table, Tag, Button, Modal} from 'antd';
 import {useContext} from  'react';
 import {UsersContext} from '../context/UsersContext';
-import type {UserContextType} from '../context/UsersContext';
 import {DeleteOutlined, FormOutlined} from '@ant-design/icons';
 import {Link} from 'react-router-dom';
-import type {User} from '../services/UsersService';
+import type {User, UserContextType} from '../types';
 import { ColumnsType } from 'antd/es/table'
-import {nameFilters, onNameFilter, emailFilters, onEmailFilter, ageFilters, onAgeFilter, hobbyFilters, onHobbyFilter, dateFilters, onDateFilter, addressFilters, onAddressFilter} from './UsersTableFilters';
+import {nameFilters, filterName, emailFilters, filterEmail, ageFilters, filterAge, hobbyFilters, filterHobby, dateFilters, filterDate, addressFilters, filterAddress} from '../utils/UsersTableFilters';
 
-function UsersTable() {
+const UsersTable = () => {
   
     const {usersData, hobbyMap, getUser, deleteUser} = useContext<UserContextType>(UsersContext);
 
-    function onDelete(id:string) {
+    const handleDelete = (id:string) => {
       const user: User|undefined= getUser(id);
       if (user !== undefined) {
         Modal.confirm({
@@ -35,7 +34,7 @@ function UsersTable() {
           else return record1.lastName.localeCompare(record2.lastName);
         },
         filters: nameFilters(usersData),
-        onFilter: onNameFilter
+        onFilter: filterName
       },
       {
         key: '2',
@@ -43,7 +42,7 @@ function UsersTable() {
         dataIndex: 'email',
         sorter: (record1: User, record2: User) => record1.email.localeCompare(record2.email),
         filters: emailFilters(usersData),
-        onFilter: onEmailFilter
+        onFilter: filterEmail
       },
       {
         key: '3',
@@ -61,7 +60,7 @@ function UsersTable() {
         dataIndex: 'age',
         sorter: (record1:User, record2:User) => record1.age-record2.age,
         filters: ageFilters(usersData),
-        onFilter: onAgeFilter
+        onFilter: filterAge
       },
       {
         key: '5',
@@ -87,7 +86,7 @@ function UsersTable() {
           </>
         ),
         filters: hobbyFilters(hobbyMap),
-        onFilter: onHobbyFilter
+        onFilter: filterHobby
       },
       {
         key: '6',
@@ -95,7 +94,7 @@ function UsersTable() {
         dataIndex: 'dateOfBirth',
         sorter: (record1: User, record2: User) => record1.dateOfBirth.localeCompare(record2.dateOfBirth),
         filters: dateFilters(usersData),
-        onFilter: onDateFilter
+        onFilter: filterDate
       },
       {
         key: '7',
@@ -103,7 +102,7 @@ function UsersTable() {
         dataIndex: 'address',
         sorter: (record1: User, record2: User) => record1.address.localeCompare(record2.address),
         filters: addressFilters(usersData),
-        onFilter: onAddressFilter
+        onFilter: filterAddress
       },
       {
         key: '8',
@@ -123,7 +122,7 @@ function UsersTable() {
           </Button>
           </Link>
           <Link to='/'>
-            <Button icon={<DeleteOutlined />} size='small' onClick={() => onDelete(id)} danger={true} block>
+            <Button icon={<DeleteOutlined />} size='small' onClick={() => handleDelete(id)} danger={true} block>
                 Delete
             </Button>
           </Link>

@@ -1,16 +1,7 @@
 import { createContext, useEffect, useState} from "react";
 import UsersService from '../services/UsersService';
-import type {User} from '../services/UsersService';
-import {getHobbies} from '../services/HobbiesService';
-import type {Hobby} from '../services/HobbiesService';
-
-export type UserContextType = {
-    usersData: User[],
-    hobbyMap: Hobby[],
-    getUser: (id: string) => User|undefined,
-    updateUser: (user:User) => void,
-    deleteUser: (id: string) => void
-}
+import type {Hobby, User, UserContextType} from '../types';
+import { getMergedDataAsync } from "../utils/getMergeData";
 
 export const UsersContext = createContext<UserContextType>(undefined!);
 
@@ -20,29 +11,20 @@ export const UsersProvider = (props: any) => {
     const [hobbyMap, setHobbyMap] = useState<Hobby[]>([]);
 
     useEffect(() => {
-        async function fetchData() {
-            let users = await UsersService.getUsers();
-            setUsersData(users);
-        }
+        (async () => {
+            const {hobbies, users} = await getMergedDataAsync();
 
-        fetchData();
+            setUsersData(users);
+            setHobbyMap(hobbies);
+        })()
     }, []);
 
-    useEffect(() => {
-        async function fetchData() {
-            let hobbies = await getHobbies();
-            setHobbyMap(hobbies);
-        }
-        
-        fetchData();
-        }, []);
-
-    function getUser(id:string) {
+    const getUser = (id:string) => {
         const found = usersData.find(elem => elem.id === id);
         return found;
     }
 
-    async function updateUser(changedUser:User) {
+    const updateUser = async (changedUser:User) => {
         let updateSuccessful = await UsersService.updateUser(changedUser);
 
         if (updateSuccessful) {
@@ -57,7 +39,7 @@ export const UsersProvider = (props: any) => {
         }
     }
 
-    async function deleteUser(id: string) {
+    const deleteUser = async (id: string) => {
         let deleteSuccessful = await UsersService.deleteUser(id);
 
         if (deleteSuccessful) {
