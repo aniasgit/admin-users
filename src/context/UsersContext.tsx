@@ -51,12 +51,28 @@ export const UsersProvider = (props: any) => {
         }
     }
 
+    const deleteUsers = async (users: User[]) => {
+        const deletePromises = users.map(async(user) => {
+            let deleteSuccessful = await UsersService.deleteUser(user.id);
+            if (deleteSuccessful) return user;
+            else return undefined;
+        });
+        const deletedUsers = await Promise.all(deletePromises);
+        let newUsersData = [];
+        newUsersData = usersData.filter((user: User) => {
+            return !deletedUsers.includes(user);
+        });
+        setUsersData(newUsersData);
+
+    }
+
     let context: UserContextType= {
         usersData,
         hobbyMap,
         getUser,
         updateUser,
-        deleteUser
+        deleteUser,
+        deleteUsers
     }
 
     return (

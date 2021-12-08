@@ -1,5 +1,5 @@
 import {Table, Tag, Button, Modal} from 'antd';
-import {useContext} from  'react';
+import {useContext, useState} from  'react';
 import {UsersContext} from '../context/UsersContext';
 import {DeleteOutlined, FormOutlined} from '@ant-design/icons';
 import {Link} from 'react-router-dom';
@@ -9,9 +9,9 @@ import {nameFilters, filterName, emailFilters, filterEmail, ageFilters, filterAg
 
 const UsersTable = () => {
   
-    const {usersData, hobbyMap, getUser, deleteUser} = useContext<UserContextType>(UsersContext);
+    const {usersData, hobbyMap, getUser, deleteUser, deleteUsers} = useContext<UserContextType>(UsersContext);
 
-    const handleDelete = (id:string) => {
+    const handleDeleteSingleUser = (id:string) => {
       const user: User|undefined= getUser(id);
       if (user !== undefined) {
         Modal.confirm({
@@ -20,6 +20,28 @@ const UsersTable = () => {
           onOk: () => deleteUser(id)
         })
       }
+    }
+
+    const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+
+    const rowSelection = {
+      onChange: (selestedRowsKeys:any, selectedRows: User[]) => {
+        setSelectedUsers(selectedRows);
+      }
+    }
+
+    const hasSelected = selectedUsers.length > 0;
+
+    const handleDeleteMultipleUsers = (users: User[]) => {
+      let usersNameList: string[] = users.map((user) => user.name+' '+user.lastName);
+      Modal.confirm({
+        title: 'Are you sure you want to delete '+usersNameList,
+        okType:"danger",
+        onOk: () => {
+          deleteUsers(users);
+          setSelectedUsers([]);
+        }
+      })
     }
 
     const columns: ColumnsType<User> = [
@@ -122,7 +144,7 @@ const UsersTable = () => {
           </Button>
           </Link>
           <Link to='/'>
-            <Button icon={<DeleteOutlined />} size='small' onClick={() => handleDelete(id)} danger={true} block>
+            <Button icon={<DeleteOutlined />} size='small' onClick={() => handleDeleteSingleUser(id)} danger={true} block>
                 Delete
             </Button>
           </Link>
@@ -132,7 +154,14 @@ const UsersTable = () => {
       }
     ]
 
-    return <Table columns = {columns} dataSource = {usersData} rowKey="id"></Table>
+    return (
+      <div>
+        <div style={{ marginBottom: 16, marginTop: 16}}>
+          <Button  danger disabled={!hasSelected} onClick={() => handleDeleteMultipleUsers(selectedUsers)}>Delete selected</Button>
+        </div>
+        <Table rowSelection={rowSelection} columns={columns} dataSource={usersData} rowKey="id"/>
+      </div>
+    );
 }
 
 export default UsersTable;

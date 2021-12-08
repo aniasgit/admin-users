@@ -24,6 +24,7 @@ type UserContextType = {
     getUser: (id: string) => User|undefined,
     updateUser: (user:User) => void,
     deleteUser: (id: string) => void
+    deleteUsers: (users: User[]) => void
 }
 
 export type {Hobby, User, UserContextType};
