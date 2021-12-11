@@ -33,9 +33,9 @@ const UsersTable = () => {
     const hasSelected = selectedUsers.length > 0;
 
     const handleDeleteMultipleUsers = (users: User[]) => {
-      let usersNameList: string[] = users.map((user) => user.name+' '+user.lastName);
+      let usersNameList: string[] = users.map((user) => ' '+user.name+' '+user.lastName);
       Modal.confirm({
-        title: 'Are you sure you want to delete '+usersNameList,
+        title: 'Are you sure you want to delete:\n '+usersNameList+'?',
         okType:"danger",
         onOk: () => {
           deleteUsers(users);
@@ -157,7 +157,7 @@ const UsersTable = () => {
     return (
       <div>
         <div style={{ marginBottom: 16, marginTop: 16}}>
-          <Button  danger disabled={!hasSelected} onClick={() => handleDeleteMultipleUsers(selectedUsers)}>Delete selected</Button>
+          <Button icon={<DeleteOutlined />} danger disabled={!hasSelected} onClick={() => handleDeleteMultipleUsers(selectedUsers)}>Delete selected</Button>
         </div>
         <Table rowSelection={rowSelection} columns={columns} dataSource={usersData} rowKey="id"/>
       </div>
