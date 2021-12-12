@@ -100,7 +100,7 @@ const UserForm = () => {
             <Form.Item name="age" label="Age" rules={[{ required: true, message: 'Age is required!'}, {type:"number", min: 0, max: 150, message: "Provide right age!"}]}>
                 <InputNumber/>
             </Form.Item>
-            <Form.Item name="hobbies" label="Hobbies" rules={[{ required: true, message: 'Please provide at least one user hobby!' }]}>
+            <Form.Item name="hobbies" label="Hobbies" rules={[{ required: true, message: 'Please provide at least one hobby!' }]}>
                 <Select mode="multiple" virtual={false}>
                     {children}
                 </Select>

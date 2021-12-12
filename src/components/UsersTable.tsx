@@ -60,7 +60,7 @@ const UsersTable = () => {
       },
       {
         key: '2',
-        title: 'Email',
+        title: 'E-mail',
         dataIndex: 'email',
         sorter: (record1: User, record2: User) => record1.email.localeCompare(record2.email),
         filters: emailFilters(usersData),
